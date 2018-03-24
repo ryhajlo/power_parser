@@ -39,7 +39,9 @@ class PowerPlotting(object):
             title = 'Power Usage Per Hour for Weekdays'
         else:
             title = 'Power for neither weekdays or weekends?'
-        PowerPlotting.__bot_plot(hours, title=title)
+
+        labels = range(0, 24)
+        PowerPlotting.__bot_plot(hours, labels, title=title)
 
     def plot_weekly_usage(self, usage_data=None):
         """Plot cummulative weekly usage data"""
