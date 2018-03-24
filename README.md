@@ -3,6 +3,9 @@ Python software for parsing, plotting, and analyzing power data from SCE, or any
 
 Power Parser can be used as a standalone application to generate interactive plots from provided usage data. Additionally, it can be used as a library to provide parsing functions for provided data in other python projects.
 
+## Setup
+Power Parser requires Python 2.7 and matplotlib (https://matplotlib.org/). Included is a .pyproj file that can be used by Visual Studio, but VS is not required.
+
 ## Standalone Usage
 
 Power Parser can easily parse Green Button csv data files and generate useful, interactive plots. Just execute the software and pass in the dataset you would like to plot.
