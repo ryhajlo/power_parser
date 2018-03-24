@@ -4,6 +4,7 @@ import sys
 import os
 import re
 import datetime
+from power_plotting import PowerPlotting
 
 def print_usage(error_string=""):
     """Print usage in the case of bad inputs"""
@@ -73,6 +74,15 @@ def main(args):
     parsed_files = []
     for csv_file in args:
         parsed_files.append(parse_csv_file(csv_file))
+
+    plotting = PowerPlotting(parsed_files[0])
+    plotting.plot_all_usage()
+    plotting.plot_usage_per_week_day()
+    plotting.plot_weekly_usage()
+    plotting.plot_hourly_usage()
+    plotting.plot_hourly_usage(weekdays=True, weekends=False)
+    plotting.plot_hourly_usage(weekdays=False, weekends=True)
+    plotting.show_plots()
 
     return True
 
