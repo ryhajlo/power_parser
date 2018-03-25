@@ -68,8 +68,8 @@ class PowerPlotting(object):
             #Update current week index
             last_week = current_week
         times, values = PowerPlotting.get_data_to_plot(weekly_data)
-        PowerPlotting.__scatter_plot(times, values, \
-            title='Weekly Usage', x_label='Usage for week of')
+        PowerPlotting.__bar_chart(times, values, \
+            title='Weekly Usage', x_label='Usage for week of', y_label='Weekly Power Usage (kWh)')
 
     def plot_usage_per_week_day(self, usage_data=None):
         """Split data into usage per week day"""
@@ -122,6 +122,18 @@ class PowerPlotting(object):
         axis = fig.add_subplot(111)
         plt.plot_date(times, values, '-o')
         plt.ylabel('Power Usage (kWh)')
+        axis.set_title(title)
+        if x_label:
+            plt.xlabel(x_label)
+
+    @staticmethod
+    def __bar_chart(times, values, title='Power Usage', x_label=None, y_label='Power Usage (kWh)'):
+        """Internal generation of scatter plot"""
+        fig = plt.figure()
+        axis = fig.add_subplot(111)
+        plt.bar(times, values, 6)
+        plt.ylabel(y_label)
+        plt.xticks(rotation=25)
         axis.set_title(title)
         if x_label:
             plt.xlabel(x_label)
