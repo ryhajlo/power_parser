@@ -53,6 +53,7 @@ def parse_csv_file(csv_path):
     """Read in a CSV file and return the data"""
     # This is only a CSV in that it's values are separted by commas.
     # There is a lot of non-tabular data in this file.
+    print "Parsing " + csv_path
     consumption_data = []
     with open(csv_path) as csv_file_handle:
         for line in csv_file_handle:
@@ -69,6 +70,7 @@ def parse_csv_file(csv_path):
 
 def main(args):
     """Main function. Takes a list of csv filenames/paths"""
+    print "Starting"
     verify_inputs(args)
 
     parsed_files = []
@@ -79,9 +81,10 @@ def main(args):
     plotting.plot_all_usage()
     plotting.plot_usage_per_week_day()
     plotting.plot_weekly_usage()
-    plotting.plot_hourly_usage()
-    plotting.plot_hourly_usage(weekdays=True, weekends=False)
-    plotting.plot_hourly_usage(weekdays=False, weekends=True)
+    plotting.plot_hourly_usage() #All days
+    plotting.plot_hourly_usage(valid_days=range(0, 5)) #Only Week Days
+    plotting.plot_hourly_usage(valid_days=range(5, 7)) #Only weekends
+
     plotting.show_plots()
 
     return True
