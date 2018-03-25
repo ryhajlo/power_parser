@@ -13,7 +13,7 @@ class PowerPlotting(object):
         values = [d['value'] for d in data]
         return times, values
 
-    def plot_hourly_usage(self, usage_data=None, weekends=True, weekdays=True):
+    def plot_hourly_usage(self, usage_data=None, valid_days=None):
         """Plot power usage per hour of the day"""
         if usage_data:
             data_to_use = usage_data
@@ -23,22 +23,26 @@ class PowerPlotting(object):
             else:
                 raise ValueError("No usage data provided")
 
+        print "Generating Hourly Usage Data"
         hours = [[] for _ in range(24)] #Initialize list by hours in a week
         for sample in data_to_use:
-            #Count weekends if we are susposed to, and if it is a weekend
-            if weekends and sample['time'].weekday() >= 5:
+            #Count only the days we are susposed to
+            if not valid_days:
+                #If no list is provided, count all days
                 hours[sample['time'].hour].append(sample['value'])
-            elif weekdays and sample['time'].weekday() < 5:
+            elif sample['time'].weekday() in valid_days:
                 hours[sample['time'].hour].append(sample['value'])
 
-        if weekends and weekdays:
+        if not valid_days:
             title = 'Power Usage Per Hour'
-        elif weekends and not weekdays:
-            title = 'Power Usage Per Hour for Weekends'
-        elif not weekends and weekdays:
+        elif valid_days == range(0, 5):
             title = 'Power Usage Per Hour for Weekdays'
+        elif valid_days == range(5, 7):
+            title = 'Power Usage Per Hour for Weekends'
         else:
-            title = 'Power for neither weekdays or weekends?'
+            title = 'Power Usage Per Hour for'
+            for day in valid_days:
+                title += " " + calendar.day_name[day]
 
         labels = range(0, 24)
         PowerPlotting.__bot_plot(hours, labels, title=title)
@@ -53,6 +57,7 @@ class PowerPlotting(object):
             else:
                 raise ValueError("No usage data provided")
 
+        print "Generating Weekly Usage Data"
         #Get the week number for the first sample.
         last_week = data_to_use[0]['time'].isocalendar()[1]
         #Initialize first week with time and empty usage
@@ -81,6 +86,7 @@ class PowerPlotting(object):
             else:
                 raise ValueError("No usage data provided")
 
+        print "Generating Usage Per Week Data"
         week_name_labels = list(calendar.day_name)
         days_per_week = len(week_name_labels) #helper variable
         week_days = [[] for _ in range(days_per_week)] #Initialize list by days in a week
@@ -99,6 +105,7 @@ class PowerPlotting(object):
             else:
                 raise ValueError("No usage data provided")
 
+        print "Generating Plots for All Data"
         times, values = PowerPlotting.get_data_to_plot(data_to_use)
         PowerPlotting.__scatter_plot(times, values)
 
